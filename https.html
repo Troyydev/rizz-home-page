@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTTP/HTTPS Domain Registration</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        a:link, a:visited {
+            color: #1e90ff;
+        }
+        .cool {
+            color: #1e90ff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Register a New HTTP/HTTPS Domain</h1>
+    <form id="httpsDomainForm">
+        <label for="name">Domain Name:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="tld">TLD:</label><br>
+        <input type="text" id="tld" name="tld"><br>
+        <label for="ip">IP Address (URL):</label><br>
+        <input type="text" id="ip" name="ip"><br><br>
+        <input type="button" value="Register" onclick="registerHttpsDomain()">
+    </form>
+    <p id="response"></p>
+    <script>
+        async function registerHttpsDomain() {
+            const name = document.getElementById('name').value;
+            const tld = document.getElementById('tld').value;
+            const ip = document.getElementById('ip').value;
+            const responseElem = document.getElementById('response');
+
+            const response = await fetch('http://127.0.0.1:5000/http_https_domain', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, tld, ip })
+            });
+
+            const result = await response.json();
+
+            if (response.status === 201) {
+                responseElem.innerHTML = `<p>Domain registered successfully.</p>`;
+            } else {
+                responseElem.innerHTML = `<p>Error: ${result.error}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
